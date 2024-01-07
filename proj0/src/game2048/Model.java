@@ -94,6 +94,17 @@ public class Model {
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
 
+        /** finds empty space in board*/
+        // loop rows
+        for(int i = 0; i < b.size(); i++){
+            // loop cols
+            for(int j = 0; j < b.size(); j++){
+                // gets value at tile
+                if(b.tile(i,j) == null){
+                    return true;
+                }
+            }
+        }
 
         return false;
     }
@@ -105,7 +116,17 @@ public class Model {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
-
+        /** finds max value in board*/
+        // loop rows
+        for(int i = 0; i < b.size(); i++){
+            // loop cols
+            for(int j = 0; j < b.size(); j++){
+                // gets value at tile
+                if(b.tile(i,j) != null && b.tile(i,j).value() == MAX_PIECE){
+                    return true;
+                }
+            }
+        }
 
         return false;
     }
@@ -118,7 +139,63 @@ public class Model {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        // base case
+        if(emptySpaceExists(b)){
+            return true;
+        }
+        // checks if there is adjacent tiles with equal values
+        return isAdjacentEqual(b);
+    }
 
+    /** finds if there is an adjacent equal tile */
+    public static boolean isAdjacentEqual(Board b){
+
+        return (isValidNorthOrSouth(b) || isValidWestOrEast(b));
+
+    }
+
+    /** returns true if tiles from left to right are
+     * equal tiles*/
+    public static boolean isValidWestOrEast(Board b){
+
+        int curr;
+        int next;
+
+        // traverse rows to find left-right matches
+        for(int i = 0; i < b.size(); i++){
+            for(int j = 0; j < b.size()-1; j++) {
+                curr = b.tile(j, i).value();
+                next = b.tile(j+1, i).value();
+
+                if(curr == next){
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /** returns true if tiles from top to bottom are
+     * equal tiles*/
+    public static boolean isValidNorthOrSouth(Board b){
+
+        int curr;
+        int next;
+
+        // traverse rows to find adjacent
+        // up-down matches
+        for(int i = 0; i < b.size()-1; i++){
+
+            for(int j = 0; j < b.size(); j++) {
+                curr = b.tile(j,i).value();
+                next = b.tile(j,i+1).value();
+
+                if(curr == next){
+                    return true;
+                }
+            }
+        }
 
         return false;
     }
