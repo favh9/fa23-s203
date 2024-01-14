@@ -87,7 +87,7 @@ public class Model {
             maxScore = Math.max(score, maxScore);
         }
     }
-    
+
     /** Returns true if at least one space on the Board is empty.
      *  Empty spaces are stored as null.
      * */
@@ -215,11 +215,65 @@ public class Model {
     public void tilt(Side side) {
         // TODO: Modify this.board (and if applicable, this.score) to account
         // for the tilt to the Side SIDE.
+        this.board.setViewingPerspective(side);
 
+        int col = board.size() - 1;
+        // traverse from right to left
+        while(col >= 0){
+            moveUp(col);
+            moveUpEquals(col);
+            col--;
+        }
+
+        this.board.setViewingPerspective(Side.NORTH);
 
         checkGameOver();
     }
 
+    /** Searches a single column from top to bottom
+     * modifies board and score
+     * returns back to tilt to check new column*/
+    public void moveUp(int col){
+
+        int ptr = board.size()-1;
+        int emptyRow = board.size()-1;
+
+        while(ptr >= 0 && emptyRow <= board.size()-1){
+
+            Tile t1 = board.tile(col,ptr);
+            if(t1 != null) {
+                this.board.move(col,emptyRow,t1);
+                emptyRow--; // row has at least one non-empty tile
+            }
+            ptr--;
+        }
+    }
+
+    public void moveUpEquals(int col){
+
+        int prev = board.size()-1;
+        int curr = board.size()-2;
+
+        while (curr >= 0) {
+
+            Tile ptr = board.tile(col, prev);
+            Tile next = board.tile(col, curr);
+
+            if(ptr != null && next != null) {
+                if (ptr.value() == next.value()) {
+                    this.board.move(col, prev, next);
+                    this.score += ptr.value() * 2;
+                    moveUp(col);
+                }
+            }
+            prev--;
+            curr--;
+        }
+
+
+
+
+    }
 
     @Override
     public String toString() {
