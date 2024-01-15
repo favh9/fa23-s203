@@ -33,11 +33,9 @@ public class BombMain {
         }
         if (phase >= 2) {
 
-            StringBuilder s = new StringBuilder();
-
-            s.append(". ".repeat(1336));
-            s.append(" -81201430");
-            b.phase2(s.toString());
+            String s = ". ".repeat(1336) +
+                    " -81201430";
+            b.phase2(s);
         }
     }
 }
